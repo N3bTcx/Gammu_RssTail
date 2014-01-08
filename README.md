@@ -16,11 +16,11 @@ Receive rss by sms using python-rsstail and gammu
 
 ![K750i and Raspberry (credit Mathieu Lallemand)][7]
 
-1.  Configure the phone using `gammu-config` in your terminal and set parameters who can be found on the [gammu phone database][1].
-2.  To test your phone simply do an `echo "My first message" | /usb/bin/gammu --send SMS TEXT +*yournumber*` You can get all the available command of gammu [here][8].
-3.  Grab your rss feeds. Like in my example the football results of the french *Ligue 1* (I did this bot for a friend who loves football). My rss in the example looks like this : <http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml>.
-4.  Put it in rsstail like : `rsstail http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml` I have to force encoding because of the type of my rss feed who have [some problems][9] (W3C say *Your feed appears to be encoded as "UTF-8", but your server is reporting "US-ASCII"*). So for me the command is `PYTHONIOENCODING=utf8 rsstail --nofail http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml` with `--nofail` to don't exit if I have errors, and `PYTHONIOENCODING` to force **utf8** encoding.
-5.  We had the option to sort only the last line with `-n 1` and format it a little bit `--format 'Football News: {title}'` After we had :
+2.  Configure the phone using `gammu-config` in your terminal and set parameters who can be found on the [gammu phone database][1].
+3.  To test your phone simply do an `echo "My first message" | /usb/bin/gammu --send SMS TEXT +*yournumber*` You can get all the available command of gammu [here][8].
+4.  Grab your rss feeds. Like in my example the football results of the french *Ligue 1* (I did this bot for a friend who loves football). My rss in the example looks like this : <http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml>.
+5.  Put it in rsstail like : `rsstail http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml` I have to force encoding because of the type of my rss feed who have [some problems][9] (W3C say *Your feed appears to be encoded as "UTF-8", but your server is reporting "US-ASCII"*). So for me the command is `PYTHONIOENCODING=utf8 rsstail --nofail http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml` with `--nofail` to don't exit if I have errors, and `PYTHONIOENCODING` to force **utf8** encoding.
+6.  We had the option to sort only the last line with `-n 1` and format it a little bit `--format 'Football News: {title}'` After we had :
 
 >     Title: Ligue 1 : Rennes - PSG (score final : 1-3) 
 >     
@@ -36,13 +36,13 @@ Now we have :
      Football News: Ligue 1 : PSG - Lille (score final : 2-2)
     
 
-6.  But we have a problem. We want only feed with *"score"* mentioned. For that we use `grep`with the option `--line-buffered` otherwise it will doesn't work. We will have :
+7.  But we have a problem. We want only feed with *"score"* mentioned. For that we use `grep`with the option `--line-buffered` otherwise it will doesn't work. We will have :
     
 ```bash   
 PYTHONIOENCODING=utf8 rsstail --nofail -n 1 --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score"
-```
+``
 
-7.  We will now pipe it using a `while ... read` loop to run command on every new line.
+8.  We will now pipe it using a `while ... read` loop to run command on every new line.
     
 ```bash
 while read line  
@@ -51,13 +51,13 @@ command
 done
 ```
 
-8.  We will modify a little bit the `gammu` command adding `-text` to specify the text submitted. The loop will look like :
+9.  We will modify a little bit the `gammu` command adding `-text` to specify the text submitted. The loop will look like :
 
 ```bash       
 while read line; do /usr/bin/gammu --sendsms TEXT +*yournumber* -text "$line"; done
 ``` 
 
-9.  With everything together we will have this :
+10.  With everything together we will have this :
 
 ```bash    
 user@host:~# PYTHONIOENCODING=utf8 rsstail --nofail --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score" | while read line; do /usr/bin/gammu --sendsms TEXT +*yournumber* -text "$line"; done
