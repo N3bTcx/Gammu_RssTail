@@ -56,9 +56,10 @@ done
  
 
 4.  With everything together we will have this :
-    
-`user@host:~# PYTHONIOENCODING=utf8 rsstail --nofail --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score" | while read line; do /usr/bin/gammu --sendsms TEXT +*yournumber* -text "$line"; done`
-  
+
+```bash    
+user@host:~# PYTHONIOENCODING=utf8 rsstail --nofail --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score" | while read line; do /usr/bin/gammu --sendsms TEXT +*yournumber* -text "$line"; done
+```
 
 Enjoy !
 
