@@ -36,12 +36,13 @@ Now we have :
      Football News: Ligue 1 : PSG - Lille (score final : 2-2)
     
 
-1.  But we have a problem. We want only feed with *"score"* mentioned. For that we use `grep`with the option `--line-buffered` otherwise it will doesn't work. We will have :
+6.  But we have a problem. We want only feed with *"score"* mentioned. For that we use `grep`with the option `--line-buffered` otherwise it will doesn't work. We will have :
     
-``PYTHONIOENCODING=utf8 rsstail --nofail -n 1 --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score"``
- 
+```bash   
+PYTHONIOENCODING=utf8 rsstail --nofail -n 1 --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score"
+``
 
-2.  We will now pipe it using a `while ... read` loop to run command on every new line.
+7.  We will now pipe it using a `while ... read` loop to run command on every new line.
     
 ```bash
 while read line  
@@ -50,12 +51,13 @@ command
 done
 ```
 
-3.  We will modify a little bit the `gammu` command adding `-text` to specify the text submitted. The loop will look like :
-    
-``while read line; do /usr/bin/gammu --sendsms TEXT +*yournumber* -text "$line"; done``
- 
+8.  We will modify a little bit the `gammu` command adding `-text` to specify the text submitted. The loop will look like :
 
-4.  With everything together we will have this :
+```bash       
+while read line; do /usr/bin/gammu --sendsms TEXT +*yournumber* -text "$line"; done
+``` 
+
+9.  With everything together we will have this :
 
 ```bash    
 user@host:~# PYTHONIOENCODING=utf8 rsstail --nofail --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score" | while read line; do /usr/bin/gammu --sendsms TEXT +*yournumber* -text "$line"; done
