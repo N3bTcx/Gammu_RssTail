@@ -40,7 +40,7 @@ Now we have :
     
 ```bash   
 PYTHONIOENCODING=utf8 rsstail --nofail -n 1 --format 'Football News: {title}' http://www.matchendirect.fr/rss/foot-ligue-1-c10.xml | grep --line-buffered "score"
-``
+```
 
 *  We will now pipe it using a `while ... read` loop to run command on every new line.
     
