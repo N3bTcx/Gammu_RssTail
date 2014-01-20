@@ -12,7 +12,7 @@ Receive rss by sms using python-rsstail and gammu
 
 ## Configuration
 
-*  First connect your phone with usb cable or bluetooth to your computer. Thanks to Mathieu L'Allemand who did [a great post][6] for the Sony K750i.
+*  First connect your phone with usb cable or bluetooth to your computer. Thanks to Mathieu Lallemand who did [a great post][6] for the Sony K750i.
 
 ![K750i and Raspberry (credit Mathieu Lallemand)][7]
 
